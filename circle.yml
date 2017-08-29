@@ -5,9 +5,9 @@ machine:
     - mysql
 
 checkout:
-  #post:
-    #- mkdir -p tmp
-    #- mkdir -p logs
+  post:
+    - mkdir -p tmp
+    - mkdir -p logs
 
 database:
   pre:
