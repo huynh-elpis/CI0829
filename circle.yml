@@ -1,0 +1,27 @@
+machine:
+  php:
+    version: 5.6.22
+  services:
+    - mysql
+
+checkout:
+  #post:
+    #- mkdir -p tmp
+    #- mkdir -p logs
+
+database:
+  pre:
+    - echo "[mysqld]" | sudo tee -a /etc/mysql/my.cnf
+    - echo 'sql_mode=NO_ENGINE_SUBSTITUTION' | sudo tee -a /etc/mysql/my.cnf
+    - sudo service mysql restart
+
+dependencies:
+  pre:
+    - rm /opt/circleci/php/$(phpenv global)/etc/conf.d/xdebug.ini
+
+test:
+  override:
+    - vendor/bin/phpunit
+    - vendor/bin/phpcs --standard=vendor/cakephp/cakephp-codesniffer/CakePHP/ruleset.xml src/ -n
+    - vendor/bin/phpcs --standard=vendor/cakephp/cakephp-codesniffer/CakePHP/ruleset.xml tests/TestCase/Controller/ -n
+    #- node_modules/.bin/eslint webroot/js/common.js
